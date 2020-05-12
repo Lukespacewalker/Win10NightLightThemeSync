@@ -41,8 +41,8 @@ namespace Win10NightLightThemeSync.Service
             string appName = "Win10NightLightThemeSync";
             if (CurrentSetting.Autorun)
             {
-                string currentPath = System.Reflection.Assembly.GetEntryAssembly().Location;
-                Registry.SetValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run", appName, currentPath, RegistryValueKind.String);
+                string exeFilePath = System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName;
+                Registry.SetValue(@"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run", appName, exeFilePath, RegistryValueKind.String);
             }
             else
             {
