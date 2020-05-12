@@ -1,6 +1,6 @@
 ﻿using System.Windows;
 
-namespace Win10DarkThemeNightLightSync.Helper
+namespace Win10NightLightThemeSync.Helper
 {
     public class BindingProxy : Freezable
     {

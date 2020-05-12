@@ -2,11 +2,11 @@
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
-using Win10DarkThemeNightLightSync.Helper;
-using Win10DarkThemeNightLightSync.Models;
-using Win10DarkThemeNightLightSync.Service;
+using Win10NightLightThemeSync.Helper;
+using Win10NightLightThemeSync.Models;
+using Win10NightLightThemeSync.Service;
 
-namespace Win10DarkThemeNightLightSync.ViewModel
+namespace Win10NightLightThemeSync.ViewModel
 {
     public class MainWindowViewModel : ViewModelBase
     {

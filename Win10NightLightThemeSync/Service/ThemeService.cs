@@ -1,7 +1,7 @@
 ﻿using Microsoft.Win32;
-using Win10DarkThemeNightLightSync.Models;
+using Win10NightLightThemeSync.Models;
 
-namespace Win10DarkThemeNightLightSync.Service
+namespace Win10NightLightThemeSync.Service
 {
     public class ThemeService
     {

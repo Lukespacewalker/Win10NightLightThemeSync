@@ -7,10 +7,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using Unity;
-using Win10DarkThemeNightLightSync.Service;
-using Win10DarkThemeNightLightSync.ViewModel;
+using Win10NightLightThemeSync.Service;
+using Win10NightLightThemeSync.ViewModel;
 
-namespace Win10DarkThemeNightLightSync
+namespace Win10NightLightThemeSync
 {
     /// <summary>
     /// Interaction logic for App.xaml

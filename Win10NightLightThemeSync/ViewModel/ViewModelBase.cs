@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace Win10DarkThemeNightLightSync.ViewModel
+namespace Win10NightLightThemeSync.ViewModel
 {
     public class ViewModelBase : INotifyPropertyChanged
     {

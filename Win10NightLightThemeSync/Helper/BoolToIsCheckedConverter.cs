@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
-namespace Win10DarkThemeNightLightSync.Helper
+namespace Win10NightLightThemeSync.Helper
 {
     public class BoolToIsCheckedConverter : IValueConverter
     {

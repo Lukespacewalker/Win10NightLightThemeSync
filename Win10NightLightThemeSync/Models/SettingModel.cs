@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Win10DarkThemeNightLightSync.Models
+namespace Win10NightLightThemeSync.Models
 {
     public enum Theme
     {

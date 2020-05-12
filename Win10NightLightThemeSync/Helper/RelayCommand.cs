@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
 
-namespace Win10DarkThemeNightLightSync.Helper
+namespace Win10NightLightThemeSync.Helper
 {
     public class RelayCommand : ICommand
     {

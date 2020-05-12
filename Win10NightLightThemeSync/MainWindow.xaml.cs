@@ -17,12 +17,12 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using SourceChord.FluentWPF;
 using Unity;
-using Win10DarkThemeNightLightSync.Helper;
-using Win10DarkThemeNightLightSync.Service;
-using Win10DarkThemeNightLightSync.ViewModel;
+using Win10NightLightThemeSync.Helper;
+using Win10NightLightThemeSync.Service;
+using Win10NightLightThemeSync.ViewModel;
 using Application = System.Windows.Application;
 
-namespace Win10DarkThemeNightLightSync
+namespace Win10NightLightThemeSync
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml

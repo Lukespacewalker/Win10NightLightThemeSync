@@ -3,7 +3,7 @@ using System.Management;
 using System.Security.Principal;
 using Microsoft.Win32;
 
-namespace Win10DarkThemeNightLightSync.Service
+namespace Win10NightLightThemeSync.Service
 {
     public enum NightLightStatus { Disable, Enable }
 

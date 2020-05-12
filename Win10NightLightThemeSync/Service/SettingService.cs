@@ -4,10 +4,10 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Win10DarkThemeNightLightSync.Helper;
-using Win10DarkThemeNightLightSync.Models;
+using Win10NightLightThemeSync.Helper;
+using Win10NightLightThemeSync.Models;
 
-namespace Win10DarkThemeNightLightSync.Service
+namespace Win10NightLightThemeSync.Service
 {
     public class SettingService
     {
