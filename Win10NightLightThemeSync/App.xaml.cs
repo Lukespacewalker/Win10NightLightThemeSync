@@ -44,6 +44,10 @@ namespace Win10NightLightThemeSync
             var mainWindowViewModel = Container.Resolve<MainWindowViewModel>();
             var window = new MainWindow {DataContext = mainWindowViewModel};
             window.Show();
+            if (settingService.CurrentSetting.StartMinimized)
+            {
+                SystemCommands.MinimizeWindow(window);
+            }
             //base.OnStartup(e);
         }
     }

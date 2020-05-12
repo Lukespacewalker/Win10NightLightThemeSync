@@ -11,6 +11,9 @@ namespace Win10NightLightThemeSync.ViewModel
     public class MainWindowViewModel : ViewModelBase
     {
         private readonly ThemeService _themeService;
+        private readonly SettingService _settingService;
+
+        #region ThemeRadioButton
 
         private bool _nightUseAppLightTheme = false;
         public bool NightUseAppLightTheme
@@ -65,12 +68,26 @@ namespace Win10NightLightThemeSync.ViewModel
         }
 
         private bool _isWatching = true;
+   
         public bool IsWatching {
             get => _isWatching;
             private set
             {
                 SetAndRaiseIfChanged(ref _isWatching, value);
             }
+        }
+
+        #endregion
+
+        public bool StartMinimized
+        {
+            get => _settingService.CurrentSetting.StartMinimized;
+            set => _settingService.CurrentSetting.StartMinimized = value;
+        }
+
+        public bool Autorun {
+            get => _settingService.CurrentSetting.Autorun;
+            set => _settingService.CurrentSetting.Autorun = value;
         }
 
         public ICommand ShowOrHideWindowsCommand { get; private set; }
@@ -81,6 +98,7 @@ namespace Win10NightLightThemeSync.ViewModel
         public MainWindowViewModel(ThemeService themeService, NightLightMonitor nightLightMonitor, SettingService settingService)
         {
             _themeService = themeService;
+            _settingService = settingService;
 
             DayUseSystemLightTheme = settingService.CurrentSetting.Day.System == Theme.Light;
             NightUseSystemLightTheme = settingService.CurrentSetting.Night.System == Theme.Light;

@@ -13,6 +13,8 @@ namespace Win10NightLightThemeSync.Models
     {
         public ThemeSetting Night { get; set; } = new ThemeSetting { App = Theme.Dark , System = Theme.Dark};
         public ThemeSetting Day { get; set; } = new ThemeSetting { App = Theme.Light, System = Theme.Light };
+        public bool StartMinimized { get; set; }
+        public bool Autorun { get; set; }
     }
 
     public class ThemeSetting

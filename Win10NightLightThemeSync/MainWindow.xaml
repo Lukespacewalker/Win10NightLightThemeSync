@@ -11,7 +11,7 @@
                   ResizeMode="CanMinimize"
                   TintOpacity="0.8"
                  
-                  Title="Windows 10 Night Light Theme Synchronization" Height="288" Width="440">
+                  Title="Windows 10 Night Light Theme Synchronization" Height="308" Width="440">
     <fw:AcrylicWindow.Resources>
         <helper:BoolToIsCheckedConverter x:Key="BoolToIsCheckedConverter"/>
         <helper:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
@@ -21,8 +21,9 @@
     </fw:AcrylicWindow.Resources>
     <StackPanel>
         <Border Padding="10,0" Background="{DynamicResource RegionColorBrush}">
-            <Grid Margin="0,8,0,12">
+            <Grid Margin="0,4,0,12">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
@@ -37,7 +38,7 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="0" Style="{StaticResource H1TextStyle}">Settings</TextBlock>
-                <TextBlock Margin="0,0,0,16" Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource H2TextStyle}">Apply these theme when 'Night Light' is</TextBlock>
+                <TextBlock Margin="0,0,0,8" Grid.ColumnSpan="2" Grid.Row="1" Style="{StaticResource H2TextStyle}">Apply these theme when 'Night Light' is</TextBlock>
                 <TextBlock  Grid.Column="0"  Grid.Row="2" Style="{StaticResource H2TextStyle}">Enabled</TextBlock>
                 <TextBlock  Grid.Column="0" Margin="0,4" Grid.Row="3">Windows Theme</TextBlock>
                 <StackPanel  Grid.Column="0" Grid.Row="4"  Orientation="Horizontal">
@@ -61,6 +62,8 @@
                     <RadioButton GroupName="Day_App" IsChecked="{Binding DayUseAppLightTheme,Converter={StaticResource BoolToIsCheckedConverter},ConverterParameter={StaticResource TrueValue}}" Content="Light"></RadioButton>
                     <RadioButton GroupName="Dat_App" IsChecked="{Binding DayUseAppLightTheme,Converter={StaticResource BoolToIsCheckedConverter},ConverterParameter={StaticResource FalseValue}}" Content="Dark" Margin="16,0,0,0"></RadioButton>
                 </StackPanel>
+                <CheckBox IsChecked="{Binding StartMinimized}" Margin="0,16,0,0" Grid.Row="7" Content="Start with minimized window"></CheckBox>
+                <CheckBox ToolTip="Add entry to HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\Run" IsChecked="{Binding Autorun}" Margin="0,16,0,0" Grid.Row="7" Grid.Column="1" Content="Run automatically at startup "></CheckBox>
             </Grid>
         </Border>
         <Border Padding="10,0">
@@ -81,6 +84,5 @@
                 </TextBlock>
             </Grid>
         </Border>
-
     </StackPanel>
 </fw:AcrylicWindow>
