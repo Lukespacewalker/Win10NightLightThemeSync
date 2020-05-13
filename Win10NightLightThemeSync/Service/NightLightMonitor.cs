@@ -36,13 +36,19 @@ namespace Win10NightLightThemeSync.Service
             _watcher = new ManagementEventWatcher(query);
         }
 
+        private readonly byte[] _target = new byte[] { 0x43, 0x42, 0x01, 0x00 };
+
         public NightLightStatus NightLightStatus
         {
             get
             {
+                // 0x43 0x42 0x01 0x00
                 byte[] nightLightData = Registry.GetValue(NightLightKeyPathForWin32, NightLightValueName, new byte[0]) as byte[];
                 if (nightLightData == null) return NightLightStatus.Disable;
-                return nightLightData[23] == 16 && nightLightData[24] == 0
+                var span = new Span<byte>(nightLightData);
+                var nightLightByteIndex = span.LastIndexOf(_target) + _target.Length;
+
+                return nightLightData[nightLightByteIndex] == 0x10 && nightLightData[nightLightByteIndex+1] == 0x0
                     ? NightLightStatus.Enable
                     : NightLightStatus.Disable;
             }
