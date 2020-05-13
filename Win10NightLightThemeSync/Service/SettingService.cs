@@ -13,12 +13,13 @@ namespace Win10NightLightThemeSync.Service
     public class SettingService
     {
         public SettingModel CurrentSetting { get; set; } = new SettingModel();
+        private string _path = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)+ @"\Win10NightLightThemeSync\";
 
         public async Task OpenConfigFile()
         {
-            if (File.Exists("appsetting.json"))
+            if (File.Exists(_path+"appsetting.json"))
             {
-                using FileStream stream = File.Open("appsetting.json", FileMode.Open, FileAccess.Read);
+                using FileStream stream = File.Open(_path+"appsetting.json", FileMode.Open, FileAccess.Read);
                 var result = await JsonHelper.Deserialize<SettingModel>(stream);
                 CurrentSetting = result ?? CurrentSetting;
             }
@@ -27,7 +28,8 @@ namespace Win10NightLightThemeSync.Service
         public async Task SaveConfigFile()
         {
             SetStartup();
-            using FileStream stream = File.Open("appsetting.json", FileMode.OpenOrCreate, FileAccess.ReadWrite);
+            Directory.CreateDirectory(_path);
+            using FileStream stream = File.Open(_path+"appsetting.json", FileMode.OpenOrCreate, FileAccess.ReadWrite);
             stream.SetLength(0);
             stream.Flush();
             stream.Seek(0, SeekOrigin.Begin);
