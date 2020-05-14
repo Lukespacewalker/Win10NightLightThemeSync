@@ -65,6 +65,11 @@ namespace Win10NightLightThemeSync
                 }));
         }
 
+        protected override void OnActivated(EventArgs e)
+        {
+            //base.OnActivated(e);
+        }
+
         protected override void OnClosing(CancelEventArgs e)
         {
             if (!NightLightWatcher.IsWatching)

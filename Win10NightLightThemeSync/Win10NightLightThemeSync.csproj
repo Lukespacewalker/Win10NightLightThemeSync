@@ -7,15 +7,16 @@
     <UseWindowsForms>true</UseWindowsForms>
     <Platforms>AnyCPU;x64</Platforms>
     <StartupObject>Win10NightLightThemeSync.App</StartupObject>
-    <ApplicationManifest>app.manifest</ApplicationManifest>
-    <ApplicationIcon>Assets\icon_light.ico</ApplicationIcon>
+    <ApplicationManifest>app.manifest</ApplicationManifest><ApplicationIcon>Assets\icon_light.ico</ApplicationIcon>
     <AssemblyName>Win10NightLightThemeSync</AssemblyName>
+    <AssemblyTitle>Windows 10 Night Light Theme Synchronization</AssemblyTitle>
     <RootNamespace>Win10NightLightThemeSync</RootNamespace>
     <Authors>Suttisak Denduangchai</Authors>
     <Product>Windows 10 Night Light Theme Synchronization</Product>
     <Description>An application for automatically switching Windows 10 theme when 'Night Light' is enabled.</Description>
     <PackageId>Windows 10 Night Light Theme Synchronization</PackageId>
     <Version>1.2</Version>
+   
   </PropertyGroup>
 
   <ItemGroup>

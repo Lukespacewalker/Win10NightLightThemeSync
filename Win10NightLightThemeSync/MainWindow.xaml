@@ -13,11 +13,18 @@
                   TitleBarMode="Extend"
                   Title="Windows 10 Night Light Theme Synchronization" Height="308" Width="440">
     <fw:AcrylicWindow.Resources>
-        <helper:BoolToIsCheckedConverter x:Key="BoolToIsCheckedConverter"/>
-        <helper:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-        <sys:Boolean x:Key="TrueValue">True</sys:Boolean>
-        <sys:Boolean x:Key="FalseValue">False</sys:Boolean>
-        <helper:BindingProxy x:Key="BindingProxy" Data="{Binding }"></helper:BindingProxy>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles/Theme.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Styles/RadioButton.xaml"></ResourceDictionary>
+                <ResourceDictionary Source="Styles/Checkbox.xaml"></ResourceDictionary>
+            </ResourceDictionary.MergedDictionaries>
+            <helper:BoolToIsCheckedConverter x:Key="BoolToIsCheckedConverter"/>
+            <helper:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <sys:Boolean x:Key="TrueValue">True</sys:Boolean>
+            <sys:Boolean x:Key="FalseValue">False</sys:Boolean>
+            <helper:BindingProxy x:Key="BindingProxy" Data="{Binding }"></helper:BindingProxy>
+        </ResourceDictionary>
     </fw:AcrylicWindow.Resources>
     <fw:AcrylicWindow.TitleBar>
         <Grid WindowChrome.IsHitTestVisibleInChrome="False" Background="Transparent">
