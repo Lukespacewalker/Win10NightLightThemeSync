@@ -9,11 +9,12 @@ namespace Win10NightLightThemeSync.Service
 
     public delegate void NightLightStatusChangedHandler(NightLightStatus status);
 
-    public class NightLightMonitor
+    public class NightLightWatcher
     {
         private readonly ManagementEventWatcher _watcher;
+        private static NightLightWatcher Instance { get; set; }
 
-        public bool IsWatching { get; private set; } = false;
+        public static bool IsWatching { get; private set; }
 
         private const string NightLightKeyPathForWMI =
             @"\\SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\CloudStore\\Store\\DefaultAccount\\Current\\default$windows.data.bluelightreduction.bluelightreductionstate\\windows.data.bluelightreduction.bluelightreductionstate";
@@ -22,10 +23,9 @@ namespace Win10NightLightThemeSync.Service
         private const string NightLightKeyPathForWin32 =
             @"HKEY_CURRENT_USER\SOFTWARE\Microsoft\Windows\CurrentVersion\CloudStore\Store\DefaultAccount\Current\default$windows.data.bluelightreduction.bluelightreductionstate\windows.data.bluelightreduction.bluelightreductionstate";
 
-
         private const string NightLightValueName = "Data";
 
-        public NightLightMonitor()
+        protected NightLightWatcher()
         {
             WindowsIdentity currentUser = WindowsIdentity.GetCurrent();
             WqlEventQuery query = new WqlEventQuery(
@@ -36,9 +36,9 @@ namespace Win10NightLightThemeSync.Service
             _watcher = new ManagementEventWatcher(query);
         }
 
-        private readonly byte[] _target = new byte[] { 0x43, 0x42, 0x01, 0x00 };
+        private static readonly byte[] _target = new byte[] { 0x43, 0x42, 0x01, 0x00 };
 
-        public NightLightStatus NightLightStatus
+        public static NightLightStatus NightLightStatus
         {
             get
             {
@@ -54,7 +54,17 @@ namespace Win10NightLightThemeSync.Service
             }
         }
 
-        public void Start()
+        static NightLightWatcher()
+        {
+            NightLightWatcher.Instance = new NightLightWatcher();
+        }
+
+        public static void Start()
+        {
+            NightLightWatcher.Instance.StartInternal();
+        }
+
+        private void StartInternal()
         {
             _watcher.EventArrived += Watcher_EventArrived;
             _watcher.Start();
@@ -62,7 +72,12 @@ namespace Win10NightLightThemeSync.Service
             WatchingStatusChanged?.Invoke(IsWatching);
         }
 
-        public void Stop()
+        public static void Stop()
+        {
+            NightLightWatcher.Instance.StopInternal();
+        }
+
+        private void StopInternal()
         {
             _watcher.EventArrived -= Watcher_EventArrived;
             _watcher.Stop();
@@ -70,9 +85,9 @@ namespace Win10NightLightThemeSync.Service
             WatchingStatusChanged?.Invoke(IsWatching);
         }
 
-        public event Action<bool> WatchingStatusChanged; 
+        public static event Action<bool> WatchingStatusChanged; 
 
-        public event NightLightStatusChangedHandler NightLightStatusChanged;
+        public static event NightLightStatusChangedHandler NightLightStatusChanged;
 
         private void Watcher_EventArrived(object sender, EventArrivedEventArgs e)
         {

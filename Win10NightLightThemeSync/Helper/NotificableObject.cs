@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using Win10NightLightThemeSync.Annotations;
 
-namespace Win10NightLightThemeSync.ViewModel
+namespace Win10NightLightThemeSync.Helper
 {
-    public class ViewModelBase : INotifyPropertyChanged
+    public class NotificableObject : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
+        [NotifyPropertyChangedInvocator]
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));

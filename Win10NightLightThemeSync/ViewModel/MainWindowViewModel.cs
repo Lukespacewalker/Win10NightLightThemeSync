@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Text;
 using System.Windows;
 using System.Windows.Input;
@@ -8,7 +9,7 @@ using Win10NightLightThemeSync.Service;
 
 namespace Win10NightLightThemeSync.ViewModel
 {
-    public class MainWindowViewModel : ViewModelBase
+    public class MainWindowViewModel : NotificableObject , IDisposable
     {
         private readonly ThemeService _themeService;
         private readonly SettingService _settingService;
@@ -21,7 +22,7 @@ namespace Win10NightLightThemeSync.ViewModel
             get => _nightUseAppLightTheme;
             set
             {
-                _themeService.SetPreferredThemeInNightLight(null,value);
+                _settingService.CurrentSetting.Night.App = value ? Theme.Light : Theme.Dark;
                 SetAndRaiseIfChanged(ref _nightUseAppLightTheme, value);
             }
         }
@@ -32,7 +33,7 @@ namespace Win10NightLightThemeSync.ViewModel
             get => _nightUseSystemLightTheme;
             set
             {
-                _themeService.SetPreferredThemeInNightLight(value, null);
+                _settingService.CurrentSetting.Night.System = value ? Theme.Light : Theme.Dark;
                 SetAndRaiseIfChanged(ref _nightUseSystemLightTheme, value);
             }
         }
@@ -42,7 +43,7 @@ namespace Win10NightLightThemeSync.ViewModel
             get => _dayUseAppLightTheme;
             set
             {
-                _themeService.SetPreferredThemeOutNightLight(null, value);
+                _settingService.CurrentSetting.Day.App = value ? Theme.Light : Theme.Dark;
                 SetAndRaiseIfChanged(ref _dayUseAppLightTheme, value);
             }
         }
@@ -52,11 +53,10 @@ namespace Win10NightLightThemeSync.ViewModel
             get => _dayUseSystemLightTheme;
             set
             {
-                _themeService.SetPreferredThemeOutNightLight(value, null);
+                _settingService.CurrentSetting.Day.System = value ? Theme.Light : Theme.Dark;
                 SetAndRaiseIfChanged(ref _dayUseSystemLightTheme, value);
             }
         }
-
 
         private string _statusText = "Monitoring";
         public string StatusText {
@@ -90,49 +90,55 @@ namespace Win10NightLightThemeSync.ViewModel
             set => _settingService.CurrentSetting.Autorun = value;
         }
 
-        public ICommand ShowOrHideWindowsCommand { get; private set; }
-        public ICommand TerminateCommand { get; private set; }
         public ICommand StartMonitoring { get; private set; }
         public ICommand StopMonitoring { get; private set; }
 
-        public MainWindowViewModel(ThemeService themeService, NightLightMonitor nightLightMonitor, SettingService settingService)
+        public MainWindowViewModel(ThemeService themeService, SettingService settingService)
         {
             _themeService = themeService;
             _settingService = settingService;
 
             DayUseSystemLightTheme = settingService.CurrentSetting.Day.System == Theme.Light;
-            NightUseSystemLightTheme = settingService.CurrentSetting.Night.System == Theme.Light;
             DayUseAppLightTheme = settingService.CurrentSetting.Day.App == Theme.Light;
+            NightUseSystemLightTheme = settingService.CurrentSetting.Night.System == Theme.Light;
             NightUseAppLightTheme = settingService.CurrentSetting.Night.App == Theme.Light;
+
+            _settingService.CurrentSetting.Day.PropertyChanged += Day_PropertyChanged;
+            _settingService.CurrentSetting.Night.PropertyChanged += Night_PropertyChanged;
 
             // Commanding
             StartMonitoring = new RelayCommand(_=>
             {
                 StatusText = "Monitoring";
                 IsWatching = true;
-                nightLightMonitor.Start();
-            }, _=>!nightLightMonitor.IsWatching);
+                NightLightWatcher.Start();
+                ThemeWatcher.Start();
+            }, _=>!NightLightWatcher.IsWatching);
             StopMonitoring = new RelayCommand(_=>
             {
                 StatusText = "Not Monitored";
                 IsWatching = false;
-                nightLightMonitor.Stop();
-            }, _ => nightLightMonitor.IsWatching);
+                NightLightWatcher.Stop();
+                ThemeWatcher.Stop();
+            }, _ => NightLightWatcher.IsWatching);
+        }
 
-            ShowOrHideWindowsCommand = new RelayCommand(_ =>
-            {
-                if (Application.Current.MainWindow.WindowState == WindowState.Minimized)
-                {
-                    SystemCommands.RestoreWindow(Application.Current.MainWindow);
-                    Application.Current.MainWindow.Activate();
-                }
-                else
-                {
-                    SystemCommands.MinimizeWindow(Application.Current.MainWindow);
-                }
-            });
+        private void Night_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            NightUseSystemLightTheme = _settingService.CurrentSetting.Night.System == Theme.Light;
+            NightUseAppLightTheme = _settingService.CurrentSetting.Night.App == Theme.Light;
+        }
 
-            TerminateCommand = new RelayCommand(_ => Application.Current.Shutdown());
+        private void Day_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            DayUseSystemLightTheme = _settingService.CurrentSetting.Day.System == Theme.Light;
+            DayUseAppLightTheme = _settingService.CurrentSetting.Day.App == Theme.Light;
+        }
+
+        public void Dispose()
+        {
+            _settingService.CurrentSetting.Day.PropertyChanged -= Day_PropertyChanged;
+            _settingService.CurrentSetting.Night.PropertyChanged -= Night_PropertyChanged;
         }
     }
 }

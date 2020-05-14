@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Interop;
 
 namespace Win10NightLightThemeSync.Helper
 {

@@ -14,6 +14,8 @@
     <Authors>Suttisak Denduangchai</Authors>
     <Product>Windows 10 Night Light Theme Synchronization</Product>
     <Description>An application for automatically switching Windows 10 theme when 'Night Light' is enabled.</Description>
+    <PackageId>Windows 10 Night Light Theme Synchronization</PackageId>
+    <Version>1.2</Version>
   </PropertyGroup>
 
   <ItemGroup>

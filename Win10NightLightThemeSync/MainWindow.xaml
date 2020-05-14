@@ -10,7 +10,7 @@
                   mc:Ignorable="d"
                   ResizeMode="CanMinimize"
                   TintOpacity="0.8"
-                 
+                  TitleBarMode="Extend"
                   Title="Windows 10 Night Light Theme Synchronization" Height="308" Width="440">
     <fw:AcrylicWindow.Resources>
         <helper:BoolToIsCheckedConverter x:Key="BoolToIsCheckedConverter"/>
@@ -19,6 +19,16 @@
         <sys:Boolean x:Key="FalseValue">False</sys:Boolean>
         <helper:BindingProxy x:Key="BindingProxy" Data="{Binding }"></helper:BindingProxy>
     </fw:AcrylicWindow.Resources>
+    <fw:AcrylicWindow.TitleBar>
+        <Grid WindowChrome.IsHitTestVisibleInChrome="False" Background="Transparent">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Image x:Name="AppIcon" Width="16"  Margin="8,0"></Image>
+            <TextBlock Grid.Column="1" VerticalAlignment="Center">Windows 10 Night Light Theme Synchronization</TextBlock>
+        </Grid>
+    </fw:AcrylicWindow.TitleBar>
     <StackPanel>
         <Border Padding="10,0" Background="{DynamicResource RegionColorBrush}">
             <Grid Margin="0,4,0,12">
@@ -82,6 +92,7 @@
                     <Run>Service Status : </Run>
                     <Run Text="{Binding StatusText, Mode=OneWay}"></Run>
                 </TextBlock>
+                <TextBlock Grid.Column="1" Grid.Row="1" HorizontalAlignment="Right" Opacity="0.6">v.1.2</TextBlock>
             </Grid>
         </Border>
     </StackPanel>

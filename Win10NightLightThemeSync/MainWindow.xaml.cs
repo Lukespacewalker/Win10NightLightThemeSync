@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
+using System.Runtime;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -15,9 +16,10 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using SourceChord.FluentWPF;
+using System.Windows.Threading;
 using Unity;
 using Win10NightLightThemeSync.Helper;
+using Win10NightLightThemeSync.Models;
 using Win10NightLightThemeSync.Service;
 using Win10NightLightThemeSync.ViewModel;
 using Application = System.Windows.Application;
@@ -29,107 +31,73 @@ namespace Win10NightLightThemeSync
     /// </summary>
     public partial class MainWindow
     {
-        private BitmapFrame _darkIcon;
-        private BitmapFrame _lightIcon;
-        private Icon _darkIco;
-        private Icon _lightIco;
-
-        private readonly NightLightMonitor _monitor = App.Container.Resolve<NightLightMonitor>();
-        private NotifyIcon _tray = new NotifyIcon();
-
-        public MainWindow()
+        public MainWindow(MainWindowViewModel viewModel)
         {
-            PrepIcon();
+            DataContext = viewModel;
+            // Init
             InitializeComponent();
-            SetIcon();
-            // Tray
-            _tray.Visible = true;
-            _tray.Text = Application.Current.MainWindow.Title;
-
-            _tray.MouseClick += (sender, args) =>
-            {
-                if (args.Button == MouseButtons.Left)
-                    ((MainWindowViewModel)DataContext).ShowOrHideWindowsCommand.Execute(null);
-            };
-            _tray.ContextMenuStrip = new ContextMenuStrip();
-            _tray.ContextMenuStrip.Items.Add("&Setting", null, ((sender, args) => ((MainWindowViewModel)DataContext).ShowOrHideWindowsCommand.Execute(null)));
-            _tray.ContextMenuStrip.Items.Add("E&xit", null, (sender, args) => ((MainWindowViewModel)DataContext).TerminateCommand.Execute(null));
+            // Set Icon
+            SetAppIcon(ThemeWatcher.AppTheme);
+            SetTaskBarIcon(ThemeWatcher.SystemTheme);
             // Event
-            SystemTheme.ThemeChanged += SystemTheme_ThemeChanged;
-            _monitor.WatchingStatusChanged += _monitor_WatchingStatusChanged;
+            ThemeWatcher.SystemThemeChanged += ThemeWatcherOnSystemThemeChanged;
+            ThemeWatcher.AppThemeChanged += ThemeWatcherOnAppThemeChanged;
             this.StateChanged += MainWindow_StateChanged;
         }
 
+        private void ThemeWatcherOnAppThemeChanged(Theme newTheme) => SetAppIcon(newTheme);
+        private void ThemeWatcherOnSystemThemeChanged(Theme newTheme) => SetTaskBarIcon(newTheme);
 
-        private void _monitor_WatchingStatusChanged(bool isWatching)
+        private void SetAppIcon(Theme newTheme)
         {
-            _tray.Visible = isWatching;
-            /*
-            if(isWatching)_tray.Text = $"[Monitoring] {Application.Current.MainWindow.Title}";
-            else _tray.Text = $"[Not Monitored] {Application.Current.MainWindow.Title}";
-            */
+            this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
+            {
+                this.AppIcon.Source = newTheme == Theme.Light ? App.LightIcon : App.DarkIcon;
+            }));
+           
+        }
+
+        private void SetTaskBarIcon(Theme newTheme)
+        {
+            this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
+                {
+                    this.Icon = newTheme == Theme.Light ? App.LightIcon : App.DarkIcon;
+                }));
         }
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            if (_monitor.IsWatching)
+            if (!NightLightWatcher.IsWatching)
             {
-                e.Cancel = true;
-                SystemCommands.MinimizeWindow(this);
+                // If not monitoring, Shutdown app instead
+                Application.Current.Shutdown();
             }
-            else base.OnClosing(e);
+            else
+            {
+                (App.Current as App).Tray.ShowBalloonTip(5000,"The app is still running." , "It has been minimized to system tray.", ToolTipIcon.Info);
+            }
+        }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            // Unsubscribe Event
+            this.StateChanged -= MainWindow_StateChanged;
+            ThemeWatcher.SystemThemeChanged -= ThemeWatcherOnSystemThemeChanged;
+            ThemeWatcher.AppThemeChanged -= ThemeWatcherOnAppThemeChanged;
+            // Dispose Context
+            (DataContext as MainWindowViewModel)?.Dispose();
+            DataContext = null;
+            base.OnClosed(e);
+            GC.Collect(2);
         }
 
         private void MainWindow_StateChanged(object sender, EventArgs e)
         {
-            if (this.WindowState == WindowState.Minimized)
+            if (this.WindowState == WindowState.Minimized && NightLightWatcher.IsWatching)
             {
-                this.ShowInTaskbar = false;
-            }
-            else if (this.WindowState == WindowState.Normal)
-            {
-                this.ShowInTaskbar = true;
+                this.Close();
             }
         }
 
-        private void PrepIcon()
-        {
-            var darkURI = new Uri("pack://application:,,,/Assets/icon_dark.ico", UriKind.RelativeOrAbsolute);
-            var lightURI = new Uri("pack://application:,,,/Assets/icon_light.ico", UriKind.RelativeOrAbsolute);
-            _darkIcon = BitmapFrame.Create(darkURI);
-            _lightIcon = BitmapFrame.Create(lightURI);
-            _darkIco = GenIcon(darkURI);
-            _lightIco = GenIcon(lightURI);
-        }
-
-        private Icon GenIcon(Uri uri)
-        {
-            var sri = Application.GetResourceStream(uri);
-            return new Icon(sri.Stream);
-            /*
-            var bitmap = new Bitmap(sri.Stream);
-            var handle = bitmap.GetHicon();
-            return System.Drawing.Icon.FromHandle(handle);
-            */
-        }
-
-        private void SetIcon()
-        {
-            if (SystemTheme.WindowsTheme == WindowsTheme.Dark)
-            {
-                this.Icon = _darkIcon;
-                _tray.Icon = _darkIco;
-            }
-            else
-            {
-                this.Icon = _lightIcon;
-                _tray.Icon = _lightIco;
-            }
-        }
-
-        private void SystemTheme_ThemeChanged(object sender, EventArgs e)
-        {
-            SetIcon();
-        }
     }
 }
