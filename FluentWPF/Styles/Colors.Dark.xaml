@@ -1,6 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:SourceChord.FluentWPF">
+                    xmlns:local="clr-namespace:SourceChord.FluentWPF"
+                    xmlns:ice="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
+                    >
     <!-- Base is for text. -->
     <Color x:Key="SystemBaseLowColor">#33FFFFFF</Color>
     <Color x:Key="SystemBaseMediumLowColor">#66FFFFFF</Color>
@@ -38,6 +40,6 @@
 
     <Color x:Key="SystemControlAcrylicWindowTintColor">#FF000000</Color>
     <Color x:Key="SystemControlAcrylicWindowFallbackColor">#FF1F1F1F</Color>
-    <SolidColorBrush x:Key="SystemControlAcrylicWindowForegroundBrush" Color="{StaticResource SystemBaseHighColor}" />
+    <SolidColorBrush ice:Freeze="True"  x:Key="SystemControlAcrylicWindowForegroundBrush" Color="{StaticResource SystemBaseHighColor}" />
 
 </ResourceDictionary>

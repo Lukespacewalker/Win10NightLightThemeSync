@@ -1,6 +1,7 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:Win10NightLightThemeSync.Styles"
+                    xmlns:ice="http://schemas.microsoft.com/winfx/2006/xaml/presentation/options"
                     xmlns:fluentWpf="clr-namespace:SourceChord.FluentWPF;assembly=FluentWPF">
     <ResourceDictionary.MergedDictionaries>
         <!--  FluentWPF Controls  -->
@@ -9,11 +10,11 @@
             <fluentWpf:ResourceDictionaryEx.ThemeDictionaries>
                 <fluentWpf:ThemeDictionary ThemeName="Light">
                     <Color x:Key="RegionColor">#DDFFFFFF</Color>
-                    <SolidColorBrush x:Key="RegionColorBrush"  Color="{DynamicResource RegionColor}"></SolidColorBrush>
+                    <SolidColorBrush ice:Freeze="True" x:Key="RegionColorBrush"  Color="{DynamicResource RegionColor}"></SolidColorBrush>
                 </fluentWpf:ThemeDictionary>
                 <fluentWpf:ThemeDictionary ThemeName="Dark">
                     <Color x:Key="RegionColor">#CC000000</Color>
-                    <SolidColorBrush x:Key="RegionColorBrush"  Color="{DynamicResource RegionColor}"></SolidColorBrush>
+                    <SolidColorBrush ice:Freeze="True" x:Key="RegionColorBrush"  Color="{DynamicResource RegionColor}"></SolidColorBrush>
                 </fluentWpf:ThemeDictionary>
             </fluentWpf:ResourceDictionaryEx.ThemeDictionaries>
         </fluentWpf:ResourceDictionaryEx>
@@ -21,7 +22,7 @@
     </ResourceDictionary.MergedDictionaries>
 
     <Style TargetType="TextBlock" x:Key="H1TextStyle">
-        <Setter Property="FontSize" Value="24"></Setter>
+        <Setter Property="FontSize"  Value="24"></Setter>
     </Style>
     <Style TargetType="TextBlock" x:Key="H2TextStyle">
         <Setter Property="FontSize" Value="16"></Setter>
