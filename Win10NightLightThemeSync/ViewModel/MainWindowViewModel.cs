@@ -9,7 +9,7 @@ using Win10NightLightThemeSync.Service;
 
 namespace Win10NightLightThemeSync.ViewModel
 {
-    public class MainWindowViewModel : NotificableObject , IDisposable
+    public class MainWindowViewModel : NotificableObject
     {
         private readonly ThemeService _themeService;
         private readonly SettingService _settingService;
@@ -17,8 +17,7 @@ namespace Win10NightLightThemeSync.ViewModel
         #region ThemeRadioButton
 
         private bool _nightUseAppLightTheme = false;
-        public bool NightUseAppLightTheme
-        {
+        public bool NightUseAppLightTheme {
             get => _nightUseAppLightTheme;
             set
             {
@@ -28,8 +27,7 @@ namespace Win10NightLightThemeSync.ViewModel
         }
 
         private bool _nightUseSystemLightTheme = false;
-        public bool NightUseSystemLightTheme
-        {
+        public bool NightUseSystemLightTheme {
             get => _nightUseSystemLightTheme;
             set
             {
@@ -68,7 +66,7 @@ namespace Win10NightLightThemeSync.ViewModel
         }
 
         private bool _isWatching = true;
-   
+
         public bool IsWatching {
             get => _isWatching;
             private set
@@ -82,12 +80,26 @@ namespace Win10NightLightThemeSync.ViewModel
         public bool StartMinimized
         {
             get => _settingService.CurrentSetting.StartMinimized;
-            set => _settingService.CurrentSetting.StartMinimized = value;
+            set
+            {
+                if (value != _settingService.CurrentSetting.StartMinimized)
+                {
+                    _settingService.CurrentSetting.StartMinimized = value;
+                    OnPropertyChanged();
+                }
+            }
         }
 
         public bool Autorun {
             get => _settingService.CurrentSetting.Autorun;
-            set => _settingService.CurrentSetting.Autorun = value;
+            set
+            {
+                if (value != _settingService.CurrentSetting.Autorun)
+                {
+                    _settingService.CurrentSetting.Autorun = value;
+                    OnPropertyChanged();
+                }
+            }
         }
 
         public ICommand StartMonitoring { get; private set; }
@@ -103,18 +115,18 @@ namespace Win10NightLightThemeSync.ViewModel
             NightUseSystemLightTheme = settingService.CurrentSetting.Night.System == Theme.Light;
             NightUseAppLightTheme = settingService.CurrentSetting.Night.App == Theme.Light;
 
-            _settingService.CurrentSetting.Day.PropertyChanged += Day_PropertyChanged;
-            _settingService.CurrentSetting.Night.PropertyChanged += Night_PropertyChanged;
+            WeakEventManager<ThemeSetting, PropertyChangedEventArgs>.AddHandler(_settingService.CurrentSetting.Day, "PropertyChanged", Day_PropertyChanged);
+            WeakEventManager<ThemeSetting, PropertyChangedEventArgs>.AddHandler(_settingService.CurrentSetting.Night, "PropertyChanged", Night_PropertyChanged);
 
             // Commanding
-            StartMonitoring = new RelayCommand(_=>
+            StartMonitoring = new RelayCommand(_ =>
             {
                 StatusText = "Monitoring";
                 IsWatching = true;
                 NightLightWatcher.Start();
                 ThemeWatcher.Start();
-            }, _=>!NightLightWatcher.IsWatching);
-            StopMonitoring = new RelayCommand(_=>
+            }, _ => !NightLightWatcher.IsWatching);
+            StopMonitoring = new RelayCommand(_ =>
             {
                 StatusText = "Not Monitored";
                 IsWatching = false;
@@ -135,10 +147,10 @@ namespace Win10NightLightThemeSync.ViewModel
             DayUseAppLightTheme = _settingService.CurrentSetting.Day.App == Theme.Light;
         }
 
-        public void Dispose()
-        {
-            _settingService.CurrentSetting.Day.PropertyChanged -= Day_PropertyChanged;
-            _settingService.CurrentSetting.Night.PropertyChanged -= Night_PropertyChanged;
-        }
+        //public void Dispose()
+        //{
+        //    WeakEventManager<ThemeSetting, PropertyChangedEventArgs>.RemoveHandler(_settingService.CurrentSetting.Day, "PropertyChanged", Day_PropertyChanged);
+        //    WeakEventManager<ThemeSetting, PropertyChangedEventArgs>.RemoveHandler(_settingService.CurrentSetting.Night, "PropertyChanged", Night_PropertyChanged);
+        //}
     }
 }

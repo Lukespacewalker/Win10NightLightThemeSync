@@ -99,7 +99,7 @@ namespace Win10NightLightThemeSync
             Tray.Visible = isWatching;
         }
 
-        private void ThemeWatcher_SystemThemeChanged(Theme newTheme) => SetTrayIcon(newTheme);
+        private void ThemeWatcher_SystemThemeChanged(object sender, ThemeChangedEventArg arg) => SetTrayIcon(arg.NewTheme);
 
         private void _tray_MouseClick(object sender, MouseEventArgs e)
         {

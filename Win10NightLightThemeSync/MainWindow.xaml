@@ -23,7 +23,7 @@
             <helper:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
             <sys:Boolean x:Key="TrueValue">True</sys:Boolean>
             <sys:Boolean x:Key="FalseValue">False</sys:Boolean>
-            <helper:BindingProxy x:Key="BindingProxy" Data="{Binding }"></helper:BindingProxy>
+            <helper:BindingProxy x:Key="BindingProxy" Data="{Binding Mode=OneTime}"></helper:BindingProxy>
         </ResourceDictionary>
     </fw:AcrylicWindow.Resources>
     <fw:AcrylicWindow.TitleBar>
@@ -93,8 +93,8 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Margin="0,8,4,8" Padding="0,4" Grid.Column="0" Style="{StaticResource ButtonRevealStyle}" Command="{Binding StartMonitoring}" Grid.Row="0">Start</Button>
-                <Button Margin="4,8,0,8" Padding="0,4" Grid.Column="1" Style="{StaticResource ButtonRevealStyle}" Command="{Binding StopMonitoring}" Grid.Row="0">Stop</Button>
+                <Button Margin="0,8,4,8" Padding="0,4" Grid.Column="0" Style="{StaticResource ButtonRevealStyle}" Command="{Binding StartMonitoring,Mode=OneTime}" Grid.Row="0">Start</Button>
+                <Button Margin="4,8,0,8" Padding="0,4" Grid.Column="1" Style="{StaticResource ButtonRevealStyle}" Command="{Binding StopMonitoring,Mode=OneTime}" Grid.Row="0">Stop</Button>
                 <TextBlock Grid.ColumnSpan="2" Grid.Row="1">
                     <Run>Service Status : </Run>
                     <Run Text="{Binding StatusText, Mode=OneWay}"></Run>

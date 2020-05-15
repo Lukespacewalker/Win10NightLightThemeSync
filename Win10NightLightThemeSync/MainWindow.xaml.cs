@@ -40,13 +40,13 @@ namespace Win10NightLightThemeSync
             SetAppIcon(ThemeWatcher.AppTheme);
             SetTaskBarIcon(ThemeWatcher.SystemTheme);
             // Event
-            ThemeWatcher.SystemThemeChanged += ThemeWatcherOnSystemThemeChanged;
-            ThemeWatcher.AppThemeChanged += ThemeWatcherOnAppThemeChanged;
+            WeakEventManager<ThemeWatcher, ThemeChangedEventArg>.AddHandler(null, "SystemThemeChanged", ThemeWatcherOnSystemThemeChanged);
+            WeakEventManager<ThemeWatcher, ThemeChangedEventArg>.AddHandler(null, "AppThemeChanged", ThemeWatcherOnAppThemeChanged);
             this.StateChanged += MainWindow_StateChanged;
         }
 
-        private void ThemeWatcherOnAppThemeChanged(Theme newTheme) => SetAppIcon(newTheme);
-        private void ThemeWatcherOnSystemThemeChanged(Theme newTheme) => SetTaskBarIcon(newTheme);
+        private void ThemeWatcherOnAppThemeChanged(object sender, ThemeChangedEventArg arg) => SetAppIcon(arg.NewTheme);
+        private void ThemeWatcherOnSystemThemeChanged(object sender, ThemeChangedEventArg arg) => SetTaskBarIcon(arg.NewTheme);
 
         private void SetAppIcon(Theme newTheme)
         {
@@ -85,15 +85,12 @@ namespace Win10NightLightThemeSync
 
         protected override void OnClosed(EventArgs e)
         {
-            // Unsubscribe Event
-            this.StateChanged -= MainWindow_StateChanged;
-            ThemeWatcher.SystemThemeChanged -= ThemeWatcherOnSystemThemeChanged;
-            ThemeWatcher.AppThemeChanged -= ThemeWatcherOnAppThemeChanged;
-            // Dispose Context
-            (DataContext as MainWindowViewModel)?.Dispose();
-            DataContext = null;
             base.OnClosed(e);
-            GC.Collect(2);
+            // Dispose Context
+            // (DataContext as MainWindowViewModel)?.Dispose();
+            DataContext = null;
+            GC.Collect(2, GCCollectionMode.Forced,true);
+            GC.WaitForPendingFinalizers();   
         }
 
         private void MainWindow_StateChanged(object sender, EventArgs e)

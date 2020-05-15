@@ -6,8 +6,6 @@ using Win10NightLightThemeSync.Models;
 
 namespace Win10NightLightThemeSync.Helper
 {
-    public delegate void ThemeChangedHandler(Theme newTheme);
-
     public class ThemeWatcher
     {
         private readonly ManagementEventWatcher _systemWatcher;
@@ -44,10 +42,10 @@ namespace Win10NightLightThemeSync.Helper
         }
 
         private void _appWatcher_EventArrived(object sender, EventArrivedEventArgs e)
-            => AppThemeChanged?.Invoke(GetTheme(ThemeType.App));
+            => AppThemeChanged?.Invoke(null, new ThemeChangedEventArg(GetTheme(ThemeType.App)));
 
         private void _systemWatcher_EventArrived(object sender, EventArrivedEventArgs e)
-            => SystemThemeChanged?.Invoke(GetTheme(ThemeType.System));
+            => SystemThemeChanged?.Invoke(null, new ThemeChangedEventArg(GetTheme(ThemeType.System)));
 
         private static Theme GetTheme(ThemeType type)
         {
@@ -75,8 +73,8 @@ namespace Win10NightLightThemeSync.Helper
             ThemeWatcher.Instance.StopInternal();
         }
 
-        public static event ThemeChangedHandler SystemThemeChanged;
-        public static event ThemeChangedHandler AppThemeChanged;
+        public static event EventHandler<ThemeChangedEventArg> SystemThemeChanged;
+        public static event EventHandler<ThemeChangedEventArg> AppThemeChanged;
 
         private void StartInternal()
         {

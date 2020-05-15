@@ -15,6 +15,17 @@ namespace Win10NightLightThemeSync.Models
         Dark, Light
     }
 
+    public class ThemeChangedEventArg : EventArgs
+    {
+        private readonly Theme _newTheme;
+        public Theme NewTheme => _newTheme;
+
+        public ThemeChangedEventArg(Theme newTheme)
+        {
+            _newTheme = newTheme;
+        }
+    }
+
     public class SettingModel : NotificableObject
     {
         private bool _startMinimized;

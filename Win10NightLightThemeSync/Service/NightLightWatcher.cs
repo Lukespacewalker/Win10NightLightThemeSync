@@ -7,8 +7,6 @@ namespace Win10NightLightThemeSync.Service
 {
     public enum NightLightStatus { Disable, Enable }
 
-    public delegate void NightLightStatusChangedHandler(NightLightStatus status);
-
     public class NightLightWatcher
     {
         private readonly ManagementEventWatcher _watcher;
@@ -87,11 +85,11 @@ namespace Win10NightLightThemeSync.Service
 
         public static event Action<bool> WatchingStatusChanged; 
 
-        public static event NightLightStatusChangedHandler NightLightStatusChanged;
+        public static event EventHandler<NightLightStatus> NightLightStatusChanged;
 
         private void Watcher_EventArrived(object sender, EventArrivedEventArgs e)
         {
-            NightLightStatusChanged?.Invoke(NightLightStatus);
+            NightLightStatusChanged?.Invoke(null,NightLightStatus);
         }
     }
 }

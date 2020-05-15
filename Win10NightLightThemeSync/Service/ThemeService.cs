@@ -25,30 +25,30 @@ namespace Win10NightLightThemeSync.Service
             Setting.Day.PropertyChanged += Day_PropertyChanged;
             Setting.Night.PropertyChanged += Night_PropertyChanged;
 
-            ApplyTheme(NightLightWatcher.NightLightStatus);
+            ApplyTheme(null,NightLightWatcher.NightLightStatus);
         }
 
-        private void ThemeWatcher_SystemThemeChanged(Theme newTheme)
+        private void ThemeWatcher_SystemThemeChanged(object sender, ThemeChangedEventArg arg)
         {
             if (NightLightWatcher.NightLightStatus == NightLightStatus.Enable)
             {
-                Setting.Night.System = newTheme;
+                Setting.Night.System = arg.NewTheme;
             }
             else
             {
-                Setting.Day.System = newTheme;
+                Setting.Day.System = arg.NewTheme;
             }
         }
 
-        private void ThemeWatcher_AppThemeChanged(Theme newTheme)
+        private void ThemeWatcher_AppThemeChanged(object sender, ThemeChangedEventArg arg)
         {
             if (NightLightWatcher.NightLightStatus == NightLightStatus.Enable)
             {
-                Setting.Night.App = newTheme;
+                Setting.Night.App = arg.NewTheme;
             }
             else
             {
-                Setting.Day.App = newTheme;
+                Setting.Day.App = arg.NewTheme;
             }
         }
 
@@ -59,20 +59,6 @@ namespace Win10NightLightThemeSync.Service
 
         private void Night_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         => ApplyTheme(ChangedType.Night);
-
-        //public void SetPreferredThemeInNightLight(bool? SystemUsesLightTheme,bool? AppsUseLightTheme)
-        //{
-        //    if(SystemUsesLightTheme.HasValue) Setting.Night.System = SystemUsesLightTheme.Value ? Theme.Light : Theme.Dark;
-        //    if(AppsUseLightTheme.HasValue) Setting.Night.App = AppsUseLightTheme.Value ? Theme.Light : Theme.Dark;
-        //    ApplyTheme(true);
-        //}
-
-        //public void SetPreferredThemeOutNightLight(bool? SystemUsesLightTheme, bool? AppsUseLightTheme)
-        //{
-        //    if (SystemUsesLightTheme.HasValue) Setting.Day.System = SystemUsesLightTheme.Value ? Theme.Light : Theme.Dark;
-        //    if (AppsUseLightTheme.HasValue) Setting.Day.App = AppsUseLightTheme.Value ? Theme.Light : Theme.Dark;
-        //    ApplyTheme(false);
-        //}
 
         private void ApplyTheme(ChangedType type)
         {
@@ -88,7 +74,7 @@ namespace Win10NightLightThemeSync.Service
             }
         }
 
-        private void ApplyTheme(NightLightStatus status)
+        private void ApplyTheme(object sender,NightLightStatus status)
         {
             if (status == NightLightStatus.Enable)
             {
