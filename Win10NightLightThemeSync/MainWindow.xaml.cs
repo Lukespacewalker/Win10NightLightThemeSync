@@ -52,7 +52,7 @@ namespace Win10NightLightThemeSync
         {
             this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
             {
-                this.AppIcon.Source = newTheme == Theme.Light ? App.LightIcon : App.DarkIcon;
+                this.AppIcon.Source = (BitmapImage)(newTheme == Theme.Light ? FindResource("LightIcon") : FindResource("DarkIcon"));
             }));
            
         }
@@ -61,7 +61,7 @@ namespace Win10NightLightThemeSync
         {
             this.Dispatcher.Invoke(DispatcherPriority.Normal, new Action(() =>
                 {
-                    this.Icon = newTheme == Theme.Light ? App.LightIcon : App.DarkIcon;
+                    this.Icon = (BitmapImage)(newTheme == Theme.Light ? FindResource("LightIcon") : FindResource("DarkIcon"));
                 }));
         }
 
@@ -90,7 +90,9 @@ namespace Win10NightLightThemeSync
             // (DataContext as MainWindowViewModel)?.Dispose();
             DataContext = null;
             GC.Collect(2, GCCollectionMode.Forced,true);
-            GC.WaitForPendingFinalizers();   
+            GC.WaitForPendingFinalizers();
+            GC.WaitForFullGCComplete();
+            GC.Collect();
         }
 
         private void MainWindow_StateChanged(object sender, EventArgs e)

@@ -5,6 +5,7 @@
              ShutdownMode="OnExplicitShutdown"
              >
     <Application.Resources>
-
+        <BitmapImage x:Key="DarkIcon" UriSource="pack://application:,,,/Assets/icon_dark.ico" DecodePixelHeight="48" DecodePixelWidth="48" CacheOption="OnDemand"/>
+        <BitmapImage x:Key="LightIcon" UriSource="pack://application:,,,/Assets/icon_light.ico" DecodePixelHeight="48" DecodePixelWidth="48" CacheOption="OnDemand"/>
     </Application.Resources>
 </Application>

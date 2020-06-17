@@ -24,8 +24,6 @@ namespace Win10NightLightThemeSync
     /// </summary>
     public partial class App : Application
     {
-        public static BitmapFrame DarkIcon;
-        public static BitmapFrame LightIcon;
         public static Icon DarkIco;
         public static Icon LightIco;
 
@@ -113,8 +111,6 @@ namespace Win10NightLightThemeSync
         {
             var darkURI = new Uri("pack://application:,,,/Assets/icon_dark.ico", UriKind.RelativeOrAbsolute);
             var lightURI = new Uri("pack://application:,,,/Assets/icon_light.ico", UriKind.RelativeOrAbsolute);
-            DarkIcon = BitmapFrame.Create(darkURI);
-            LightIcon = BitmapFrame.Create(lightURI);
             DarkIco = GenIcon(darkURI);
             LightIco = GenIcon(lightURI);
         }
