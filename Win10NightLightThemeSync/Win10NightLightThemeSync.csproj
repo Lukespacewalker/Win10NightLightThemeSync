@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0-windows</TargetFramework>
     <UseWPF>true</UseWPF>
     <UseWindowsForms>true</UseWindowsForms>
     <Platforms>AnyCPU;x64</Platforms>
@@ -15,7 +15,8 @@
     <Product>Windows 10 Night Light Theme Synchronization</Product>
     <Description>An application for automatically switching Windows 10 theme when 'Night Light' is enabled.</Description>
     <PackageId>Windows 10 Night Light Theme Synchronization</PackageId>
-    <Version>1.2</Version>
+    <Version>1.4</Version>
+    <AssemblyVersion>1.4.0.0</AssemblyVersion>
    
   </PropertyGroup>
 
@@ -26,9 +27,9 @@
 
   <ItemGroup>
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
-    <PackageReference Include="System.Drawing.Common" Version="4.7.0" />
-    <PackageReference Include="System.Management" Version="4.7.0" />
-    <PackageReference Include="Unity" Version="5.11.7" />
+    <PackageReference Include="System.Drawing.Common" Version="5.0.0" />
+    <PackageReference Include="System.Management" Version="5.0.0" />
+    <PackageReference Include="Unity" Version="5.11.9" />
   </ItemGroup>
 
   <ItemGroup>
